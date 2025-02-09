@@ -150,7 +150,7 @@ namespace BusReservationApp.Context
                     Name = "Super Admin",
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt,
-                    Role = "SuperAdmin",
+                    Role = "Admin",
                     IsApproved = true,
                     CreatedAt = DateTime.Now
 
