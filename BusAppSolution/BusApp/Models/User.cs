@@ -21,7 +21,7 @@ namespace BusApp.Models
         public bool IsApproved { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-
+        public bool IsDeleted { get; set; } = false;
 
         //Navigation Properties
         public TransportOperator? TransportOperator { get; set; }

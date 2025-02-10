@@ -2,6 +2,7 @@
 using BusApp.Models;
 using BusApp.Repositories.Interfaces.TripManage;
 using BusApp.Services.Interfaces.TripManage;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusApp.Services.Implementations.TripManage
 {
@@ -167,5 +168,66 @@ namespace BusApp.Services.Implementations.TripManage
                 throw new Exception($"An error occurred while deleting the trip: {ex.Message}");
             }
         }
+
+        //For Booking
+        public async Task<IEnumerable<TripResponseDto>> GetAvailableTripsAsync(int routeId, DateTime? departureDate)
+        {
+            try
+            {
+                if (routeId <= 0)
+                    throw new ArgumentException("Invalid Route ID.");
+
+                var trips = await _tripRepo.GetAvailableTripsAsync(routeId, departureDate);
+                if (trips == null || !trips.Any())
+                    throw new Exception("No available trips found for the given criteria.");
+
+                return trips.Select(t => new TripResponseDto
+                {
+                    Id = t.Id,
+                    BusRouteId = t.BusRouteId,
+                    BusId = t.BusId,
+                    DepartureTime = t.DepartureTime,
+                    ArrivalTime = t.ArrivalTime,
+                    Price = t.Price
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving available trips.", ex);
+            }
+        }
+
+        public async Task<IEnumerable<TripResponseDto>> GetAvailableTripsByPriceAsync(int routeId, DateTime? departureDate, decimal? maxPrice)
+        {
+            if (routeId <= 0)
+            {
+                throw new ArgumentException("Invalid Route ID.");
+            }
+
+            try
+            {
+                var trips = await _tripRepo.GetAvailableTripsByPriceAsync(routeId, departureDate, maxPrice);
+
+                if (trips == null || !trips.Any())
+                {
+                    return new List<TripResponseDto>(); 
+                }
+
+                return trips.Select(t => new TripResponseDto
+                {
+                    Id = t.Id,
+                    BusRouteId = t.BusRouteId,
+                    BusId = t.BusId,
+                    DepartureTime = t.DepartureTime,
+                    ArrivalTime = t.ArrivalTime,
+                    Price = t.Price
+                });
+            }
+            catch (Exception)
+            {
+                throw new Exception("An error occurred while retrieving available trips.");
+            }
+        }
+
     }
 }

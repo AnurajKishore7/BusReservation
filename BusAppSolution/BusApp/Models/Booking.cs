@@ -26,9 +26,7 @@ namespace BusApp.Models
         //Navigation Properties
         public Client? Client { get; set; }
         public Trip? Trip { get; set; }
-
         public ICollection<TicketPassenger> TicketPassengers { get; set; } = new List<TicketPassenger>();
-
         public Payment? Payment { get; set; }
     }
 }

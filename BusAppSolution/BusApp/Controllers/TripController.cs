@@ -1,4 +1,5 @@
 ﻿using BusApp.DTOs.TripManage;
+using BusApp.Services.Implementations.TripManage;
 using BusApp.Services.Interfaces.TripManage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -101,7 +102,7 @@ namespace BusApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin,TransportOperator")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteTrip(int id)
         {
             try
@@ -120,5 +121,45 @@ namespace BusApp.Controllers
                 return StatusCode(500, new { message = "An error occurred while deleting the trip.", error = ex.Message });
             }
         }
+
+        //For booking
+        [HttpGet("available")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAvailableTrips([FromQuery] int routeId, [FromQuery] DateTime? departureDate)
+        {
+            if (routeId <= 0)
+            {
+                return BadRequest("Invalid Route ID.");
+            }
+
+            var trips = await _service.GetAvailableTripsAsync(routeId, departureDate);
+
+            return trips.Any() ? Ok(trips) : NotFound("No available trips found for the given route.");
+        }
+
+        [HttpGet("available-by-price")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAvailableTripsByPrice(
+    [FromQuery] int routeId,
+    [FromQuery] DateTime? departureDate,
+    [FromQuery] decimal? maxPrice)
+        {
+            if (routeId <= 0)
+            {
+                return BadRequest("Invalid Route ID.");
+            }
+
+            try
+            {
+                var trips = await _service.GetAvailableTripsByPriceAsync(routeId, departureDate, maxPrice);
+
+                return trips.Any() ? Ok(trips) : NotFound("No trips found within the given price range.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }

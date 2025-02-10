@@ -121,5 +121,73 @@ namespace BusApp.Repositories.Implementations.TripManage
             }
         }
 
+        //For booking
+        public async Task<IEnumerable<Trip>> GetAvailableTripsAsync(int routeId, DateTime? departureDate)
+        {
+            try
+            {
+                if (routeId <= 0)
+                    throw new ArgumentException("Invalid Route ID.");
+
+                var query = _context.Trips
+                    .Include(t => t.Bus)
+                    .Include(t => t.BusRoute)
+                    .Where(t => t.BusRouteId == routeId);
+
+                if (departureDate.HasValue)
+                {
+                    query = query.Where(t => t.DepartureTime.Date == departureDate.Value.Date);
+                }
+
+                var trips = await query.ToListAsync();
+                if (trips == null || !trips.Any())
+                    throw new Exception("No available trips found for the given criteria.");
+
+                return trips;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while fetching available trips.", ex);
+            }
+        }
+
+        public async Task<IEnumerable<Trip>> GetAvailableTripsByPriceAsync(int routeId, DateTime? departureDate, decimal? maxPrice)
+        {
+            try
+            {
+                if (routeId <= 0)
+                    throw new ArgumentException("Invalid Route ID.");
+
+                var query = _context.Trips
+                    .Include(t => t.Bus)
+                    .Include(t => t.BusRoute)
+                    .Where(t => t.BusRouteId == routeId);
+
+                if (departureDate.HasValue)
+                {
+                    query = query.Where(t => t.DepartureTime.Date == departureDate.Value.Date);
+                }
+
+                if (maxPrice.HasValue)
+                {
+                    if (maxPrice.Value < 0)
+                        throw new ArgumentException("Maximum price cannot be negative.");
+
+                    query = query.Where(t => t.Price <= maxPrice.Value);
+                }
+
+                var trips = await query.ToListAsync();
+
+                if (trips == null || !trips.Any())
+                    throw new Exception("No available trips found for the given criteria.");
+
+                return trips;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving available trips.", ex);
+            }
+        }
+
     }
 }
