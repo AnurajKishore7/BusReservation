@@ -1,9 +1,17 @@
 using System.Text;
 using BusApp.Models;
 using BusApp.Repositories.Implementations;
+using BusApp.Repositories.Implementations.BusRouteManage;
+using BusApp.Repositories.Implementations.TransOp;
 using BusApp.Repositories.Interfaces;
+using BusApp.Repositories.Interfaces.BusRouteManage;
+using BusApp.Repositories.Interfaces.TransOp;
 using BusApp.Services.Implementations;
+using BusApp.Services.Implementations.BusRouteManage;
+using BusApp.Services.Implementations.TransOp;
 using BusApp.Services.Interfaces;
+using BusApp.Services.Interfaces.BusRouteManage;
+using BusApp.Services.Interfaces.TransOp;
 using BusReservationApp.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -82,12 +90,20 @@ namespace BusApp
             builder.Services.AddScoped<IRepository<Client, int>, ClientRepo>();
             builder.Services.AddScoped<ITransportOperatorRepo, TransportOperatorRepo>();
             builder.Services.AddScoped<IRepository<TransportOperator, int>, TransportOperatorRepo>();
+            builder.Services.AddScoped<ITransOpManageRepo, TransOpManageRepo>();
+            builder.Services.AddScoped<ITransOpRepo, TransOpRepo>();
+            builder.Services.AddScoped<IBusRouteRepo, BusRouteRepo>();
+
             #endregion
 
             // Service Layer Dependency Injection
             #region Services
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IRoleService, RoleService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();     
+            builder.Services.AddScoped<ITransOpManageService, TransOpManageService>();
+            builder.Services.AddScoped<ITransOpService, TransOpService>();
+            builder.Services.AddScoped<IBusRouteService, BusRouteService>();
+
             #endregion
 
             // JWT Authentication & Authorization
@@ -99,8 +115,8 @@ namespace BusApp
                 throw new ArgumentNullException("Jwt:Secret is missing in configuration.");
             }
 
-            //var key = Encoding.UTF8.GetBytes(jwtSecret);
-            var key = Encoding.UTF8.GetBytes("pgh4y1gatINIryRxcfPv1Thrlmxl4gWtCFaQkqUaNAY=");
+            var key = Encoding.UTF8.GetBytes(jwtSecret);
+            //var key = Encoding.UTF8.GetBytes("pgh4y1gatINIryRxcfPv1Thrlmxl4gWtCFaQkqUaNAY=");
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

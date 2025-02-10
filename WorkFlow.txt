@@ -1,0 +1,26 @@
+1. Database design
+2. Create Models
+3. Create DbContext
+	-- DbSet
+	-- ORM & Seeding
+	-- Set Connection string in appsettings.json
+	-- Register DbContext in Program.cs
+4. Create Repositories
+	-- Interfaces & implementations using DbContext
+	-- Return tasks
+	-- Register repositories in Program.cs
+5. Create DTOs
+	-- Request & response
+6. Create Services
+	-- Interfaces & implementations
+	-- Inherit IServics & use IRepo
+	-- return Task
+	-- Register services in Program.cs
+7. Create Controllers
+	-- implement using IService
+	 
+
+Note: "Install required packages"
+
+
+ 

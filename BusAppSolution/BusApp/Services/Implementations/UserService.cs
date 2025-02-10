@@ -14,7 +14,7 @@ namespace BusApp.Services.Implementations
     {
         private readonly IRepository<User, string> _userRepository;
         private readonly IClientRepo _clientRepository;
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration; // For JWT
 
 
         public UserService(IRepository<User, string> userRepository,
