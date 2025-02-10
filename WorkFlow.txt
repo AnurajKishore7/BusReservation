@@ -18,6 +18,7 @@
 	-- Register services in Program.cs
 7. Create Controllers
 	-- implement using IService
+	-- Add RBAC
 	 
 
 Note: "Install required packages"
