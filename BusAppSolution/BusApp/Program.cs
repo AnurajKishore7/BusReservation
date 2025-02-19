@@ -105,6 +105,7 @@ namespace BusApp
             builder.Services.AddScoped<IBusRouteRepo, BusRouteRepo>();
             builder.Services.AddScoped<ITripRepo, TripRepo>();
             builder.Services.AddScoped<IClientManageRepo, ClientManageRepo>();
+            //BookingService
             builder.Services.AddScoped<IBookingRepo, BookingRepo>();
             builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
             builder.Services.AddScoped<ITicketPassengerRepo, TicketPassengerRepo>();

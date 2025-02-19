@@ -39,7 +39,8 @@ namespace BusApp.Migrations
                     PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsApproved = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,7 +58,8 @@ namespace BusApp.Migrations
                     DOB = table.Column<DateOnly>(type: "date", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Contact = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDiabled = table.Column<bool>(type: "bit", nullable: false)
+                    IsDisabled = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,8 +68,7 @@ namespace BusApp.Migrations
                         name: "FK_Clients_Users_Email",
                         column: x => x.Email,
                         principalTable: "Users",
-                        principalColumn: "Email",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Email");
                 });
 
             migrationBuilder.CreateTable(
@@ -78,7 +79,8 @@ namespace BusApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(255)", nullable: true),
-                    Contact = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Contact = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,8 +89,7 @@ namespace BusApp.Migrations
                         name: "FK_TransportOperators_Users_Email",
                         column: x => x.Email,
                         principalTable: "Users",
-                        principalColumn: "Email",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Email");
                 });
 
             migrationBuilder.CreateTable(
@@ -219,37 +220,51 @@ namespace BusApp.Migrations
             migrationBuilder.InsertData(
                 table: "BusRoutes",
                 columns: new[] { "Id", "Destination", "Distance", "EstimatedDuration", "Source" },
-                values: new object[] { 1, "Kanyakumari", 750, "12:30", "Chennai" });
+                values: new object[,]
+                {
+                    { 1, "Kanyakumari", 750, "12:30", "Chennai" },
+                    { 2, "Chennai", 750, "12:30", "Kanyakumari" },
+                    { 3, "Bangalore", 350, "06:00", "Chennai" },
+                    { 4, "Chennai", 350, "06:00", "Bangalore" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Email", "CreatedAt", "IsApproved", "Name", "PasswordHash", "PasswordSalt", "Role" },
+                columns: new[] { "Email", "CreatedAt", "IsApproved", "IsDeleted", "Name", "PasswordHash", "PasswordSalt", "Role" },
                 values: new object[,]
                 {
-                    { "admin@gmail.com", new DateTime(2025, 2, 9, 23, 5, 47, 710, DateTimeKind.Local).AddTicks(945), true, "Super Admin", new byte[] { 122, 59, 147, 6, 163, 2, 135, 202, 103, 49, 155, 147, 139, 82, 56, 39, 83, 82, 235, 74, 178, 41, 13, 0, 183, 41, 17, 160, 4, 10, 44, 208, 152, 163, 203, 249, 31, 98, 104, 101, 237, 126, 196, 13, 194, 245, 138, 205, 28, 54, 147, 23, 37, 252, 254, 244, 226, 64, 168, 128, 17, 253, 0, 153 }, new byte[] { 67, 195, 53, 206, 216, 43, 243, 94, 253, 32, 104, 51, 187, 103, 247, 230, 205, 118, 14, 125, 117, 129, 102, 217, 223, 84, 71, 177, 19, 137, 255, 227, 67, 101, 135, 95, 127, 64, 88, 238, 176, 38, 87, 186, 23, 240, 201, 224, 9, 203, 50, 126, 205, 17, 18, 56, 206, 51, 149, 105, 76, 69, 89, 185, 67, 52, 15, 134, 191, 217, 8, 55, 120, 204, 81, 227, 152, 127, 23, 37, 13, 80, 92, 93, 78, 226, 233, 131, 63, 98, 248, 243, 21, 208, 186, 11, 159, 40, 0, 221, 238, 131, 10, 18, 3, 71, 167, 154, 115, 131, 253, 173, 189, 225, 86, 74, 185, 65, 103, 74, 151, 216, 20, 141, 67, 147, 207, 254 }, "Admin" },
-                    { "anuraj@gmail.com", new DateTime(2025, 2, 9, 23, 5, 47, 710, DateTimeKind.Local).AddTicks(951), true, "Anuraj", new byte[] { 119, 254, 232, 33, 147, 111, 207, 113, 133, 117, 163, 244, 149, 251, 159, 95, 219, 211, 115, 146, 245, 153, 208, 78, 44, 97, 27, 243, 94, 2, 194, 19, 237, 143, 163, 241, 216, 218, 67, 8, 179, 137, 129, 226, 6, 194, 195, 57, 29, 167, 62, 196, 167, 157, 45, 245, 115, 236, 114, 78, 105, 186, 224, 44 }, new byte[] { 130, 78, 233, 146, 239, 121, 102, 64, 31, 148, 9, 115, 151, 250, 250, 224, 154, 155, 80, 242, 89, 122, 224, 215, 106, 125, 124, 214, 184, 33, 56, 116, 215, 227, 30, 129, 78, 220, 46, 56, 116, 107, 149, 193, 50, 187, 53, 170, 69, 133, 110, 102, 5, 205, 43, 46, 134, 79, 16, 45, 191, 241, 215, 174, 251, 171, 219, 154, 199, 218, 166, 56, 61, 252, 71, 71, 9, 65, 85, 102, 173, 133, 195, 113, 223, 167, 141, 234, 154, 135, 62, 155, 97, 12, 16, 126, 8, 160, 122, 203, 140, 135, 74, 67, 2, 123, 204, 116, 55, 7, 47, 142, 103, 179, 162, 76, 131, 178, 181, 132, 153, 241, 112, 144, 250, 11, 226, 181 }, "Client" },
-                    { "smartbus@gmail.com", new DateTime(2025, 2, 9, 23, 5, 47, 710, DateTimeKind.Local).AddTicks(948), true, "Smart Bus", new byte[] { 164, 27, 161, 121, 123, 86, 180, 146, 43, 209, 32, 198, 241, 96, 130, 229, 59, 183, 232, 206, 216, 157, 58, 130, 235, 45, 59, 0, 218, 228, 240, 145, 237, 213, 209, 94, 81, 151, 115, 201, 107, 109, 59, 96, 18, 3, 173, 239, 199, 134, 147, 208, 11, 212, 196, 245, 67, 147, 207, 155, 59, 7, 80, 84 }, new byte[] { 62, 92, 142, 22, 84, 6, 228, 134, 93, 219, 42, 219, 204, 196, 135, 95, 254, 202, 88, 235, 72, 179, 88, 77, 123, 162, 190, 36, 165, 233, 15, 125, 176, 7, 122, 3, 227, 131, 195, 105, 215, 183, 241, 117, 84, 104, 140, 189, 106, 69, 187, 132, 131, 192, 123, 246, 93, 153, 175, 33, 214, 139, 254, 106, 3, 0, 6, 171, 250, 230, 48, 163, 29, 207, 195, 105, 40, 167, 102, 123, 232, 111, 148, 221, 126, 108, 223, 215, 5, 243, 6, 248, 195, 254, 17, 181, 143, 210, 100, 51, 183, 136, 42, 166, 129, 173, 70, 217, 77, 198, 91, 128, 156, 132, 30, 7, 86, 39, 231, 52, 149, 186, 188, 147, 97, 212, 186, 127 }, "TransportOperator" }
+                    { "admin@gmail.com", new DateTime(2025, 2, 19, 11, 7, 45, 737, DateTimeKind.Local).AddTicks(2499), true, false, "Super Admin", new byte[] { 135, 89, 179, 178, 87, 181, 95, 146, 213, 209, 219, 173, 6, 207, 171, 18, 126, 231, 141, 72, 161, 119, 25, 86, 94, 95, 157, 155, 148, 145, 128, 7, 32, 3, 79, 119, 79, 33, 129, 155, 2, 52, 97, 97, 63, 240, 161, 153, 33, 188, 40, 240, 249, 182, 243, 180, 27, 171, 171, 152, 92, 156, 1, 229 }, new byte[] { 126, 202, 212, 226, 243, 172, 167, 31, 139, 161, 216, 55, 27, 165, 243, 204, 76, 220, 176, 214, 77, 40, 78, 242, 212, 200, 111, 0, 58, 101, 17, 75, 82, 235, 92, 154, 63, 160, 234, 157, 214, 213, 143, 164, 41, 128, 202, 105, 123, 172, 162, 113, 9, 59, 214, 185, 103, 159, 102, 239, 253, 173, 16, 34, 121, 245, 230, 95, 17, 87, 253, 211, 14, 189, 61, 22, 189, 84, 199, 140, 131, 18, 172, 157, 89, 243, 38, 62, 155, 85, 199, 247, 97, 74, 126, 236, 76, 43, 148, 16, 73, 146, 252, 240, 60, 4, 130, 31, 128, 95, 106, 26, 43, 208, 121, 104, 243, 254, 230, 253, 214, 106, 193, 137, 243, 27, 34, 69 }, "Admin" },
+                    { "anuraj@gmail.com", new DateTime(2025, 2, 19, 11, 7, 45, 737, DateTimeKind.Local).AddTicks(2503), true, false, "Anuraj", new byte[] { 236, 177, 207, 82, 244, 194, 155, 138, 166, 35, 96, 207, 187, 219, 244, 137, 142, 236, 98, 244, 14, 24, 120, 4, 190, 230, 202, 39, 142, 213, 171, 219, 172, 139, 206, 86, 6, 156, 231, 226, 107, 51, 245, 241, 0, 81, 165, 152, 108, 247, 116, 27, 44, 253, 180, 133, 76, 102, 126, 167, 178, 220, 215, 136 }, new byte[] { 180, 180, 156, 75, 144, 109, 79, 133, 61, 141, 220, 151, 221, 193, 204, 126, 158, 191, 107, 150, 195, 206, 133, 87, 82, 58, 95, 53, 121, 170, 152, 49, 228, 66, 191, 99, 176, 37, 151, 33, 41, 172, 11, 40, 60, 18, 22, 73, 6, 182, 140, 228, 245, 134, 41, 195, 26, 65, 131, 136, 124, 45, 244, 104, 179, 225, 44, 231, 200, 21, 124, 83, 125, 139, 52, 20, 145, 53, 127, 161, 111, 110, 112, 28, 199, 65, 8, 47, 27, 57, 240, 242, 117, 55, 138, 4, 255, 144, 247, 123, 102, 36, 93, 227, 164, 168, 35, 134, 47, 97, 198, 162, 184, 101, 46, 221, 253, 92, 91, 132, 42, 82, 26, 170, 61, 28, 69, 86 }, "Client" },
+                    { "smartbus@gmail.com", new DateTime(2025, 2, 19, 11, 7, 45, 737, DateTimeKind.Local).AddTicks(2501), true, false, "Smart Bus", new byte[] { 127, 242, 60, 50, 7, 36, 123, 248, 118, 137, 188, 212, 191, 76, 229, 108, 119, 20, 5, 213, 210, 53, 206, 95, 191, 109, 20, 221, 74, 210, 45, 78, 112, 196, 203, 197, 131, 178, 230, 190, 41, 8, 243, 183, 5, 149, 210, 163, 85, 202, 114, 151, 156, 181, 91, 50, 132, 233, 52, 60, 5, 228, 228, 106 }, new byte[] { 140, 89, 237, 31, 135, 84, 156, 114, 190, 60, 29, 36, 223, 53, 2, 236, 74, 124, 110, 47, 44, 150, 242, 21, 56, 68, 165, 183, 201, 173, 17, 116, 184, 33, 248, 251, 43, 74, 48, 97, 248, 198, 138, 235, 120, 14, 249, 102, 38, 73, 18, 26, 81, 46, 133, 114, 73, 107, 19, 142, 242, 114, 169, 66, 190, 191, 90, 131, 31, 160, 143, 192, 231, 61, 201, 11, 62, 92, 76, 37, 82, 194, 185, 118, 206, 129, 136, 158, 155, 20, 239, 61, 34, 85, 199, 242, 217, 133, 195, 77, 123, 138, 71, 190, 221, 178, 200, 77, 143, 74, 42, 240, 52, 132, 155, 236, 227, 42, 181, 87, 106, 3, 170, 135, 117, 180, 183, 128 }, "TransportOperator" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Clients",
-                columns: new[] { "Id", "Contact", "DOB", "Email", "Gender", "IsDiabled", "Name" },
-                values: new object[] { 1, "+911234567890", new DateOnly(2002, 7, 11), "anuraj@gmail.com", "Male", false, "Anuraj" });
+                columns: new[] { "Id", "Contact", "DOB", "Email", "Gender", "IsDeleted", "IsDisabled", "Name" },
+                values: new object[] { 1, "+911234567890", new DateOnly(2002, 7, 11), "anuraj@gmail.com", "Male", false, false, "Anuraj" });
 
             migrationBuilder.InsertData(
                 table: "TransportOperators",
-                columns: new[] { "Id", "Contact", "Email", "Name" },
-                values: new object[] { 1, "+919876543210", "smartbus@gmail.com", "SmartBus" });
+                columns: new[] { "Id", "Contact", "Email", "IsDeleted", "Name" },
+                values: new object[] { 1, "+919876543210", "smartbus@gmail.com", false, "SmartBus" });
 
             migrationBuilder.InsertData(
                 table: "Buses",
                 columns: new[] { "Id", "BusNo", "BusType", "OperatorId", "TotalSeats" },
-                values: new object[] { 1, "TN01AB1234", "AC Sleeper", 1, 40 });
+                values: new object[,]
+                {
+                    { 1, "TN01AB1234", "AC Sleeper", 1, 40 },
+                    { 2, "TN01AB1235", "non-AC Seater", 1, 40 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Trips",
                 columns: new[] { "Id", "ArrivalTime", "BusId", "BusRouteId", "DepartureTime", "Price" },
-                values: new object[] { 1, new DateTime(2025, 2, 10, 10, 30, 0, 0, DateTimeKind.Unspecified), 1, 1, new DateTime(2025, 2, 10, 8, 0, 0, 0, DateTimeKind.Unspecified), 700m });
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 2, 10, 20, 30, 0, 0, DateTimeKind.Unspecified), 1, 1, new DateTime(2025, 2, 10, 8, 0, 0, 0, DateTimeKind.Unspecified), 700m },
+                    { 2, new DateTime(2025, 2, 10, 14, 0, 0, 0, DateTimeKind.Unspecified), 2, 3, new DateTime(2025, 2, 10, 8, 0, 0, 0, DateTimeKind.Unspecified), 350m }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_ClientId",

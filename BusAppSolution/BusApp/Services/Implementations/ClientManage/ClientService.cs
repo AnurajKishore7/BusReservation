@@ -29,7 +29,7 @@ namespace BusApp.Services.Implementations.ClientManage
                     DOB = client.DOB,
                     Gender = client.Gender,
                     Contact = client.Contact,
-                    IsDiabled = client.IsDiabled
+                    IsDisabled = client.IsDisabled
                 });
             }
             catch (Exception ex)
@@ -56,7 +56,7 @@ namespace BusApp.Services.Implementations.ClientManage
                     DOB = client.DOB,
                     Gender = client.Gender,
                     Contact = client.Contact,
-                    IsDiabled = client.IsDiabled
+                    IsDisabled = client.IsDisabled
                 };
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace BusApp.Services.Implementations.ClientManage
                     DOB = client.DOB,
                     Gender = client.Gender,
                     Contact = client.Contact,
-                    IsDiabled = client.IsDiabled
+                    IsDisabled = client.IsDisabled
                 };
             }
             catch (Exception ex)
@@ -108,7 +108,7 @@ namespace BusApp.Services.Implementations.ClientManage
                 existingClient.DOB = clientDto.DOB;
                 existingClient.Gender = clientDto.Gender;
                 existingClient.Contact = clientDto.Contact;
-                existingClient.IsDiabled = clientDto.IsDiabled;
+                existingClient.IsDisabled = clientDto.IsDiabled;
 
                 var updatedClient = await _clientRepo.UpdateClientAsync(existingClient);
                 if (updatedClient == null) return null;
@@ -121,7 +121,7 @@ namespace BusApp.Services.Implementations.ClientManage
                     DOB = updatedClient.DOB,
                     Gender = updatedClient.Gender,
                     Contact = updatedClient.Contact,
-                    IsDiabled = updatedClient.IsDiabled
+                    IsDisabled = updatedClient.IsDisabled
                 };
             }
             catch (Exception ex)

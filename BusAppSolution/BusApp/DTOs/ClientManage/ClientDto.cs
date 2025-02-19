@@ -8,6 +8,6 @@
         public DateOnly? DOB { get; set; }
         public string? Gender { get; set; }
         public string? Contact { get; set; }
-        public bool IsDiabled { get; set; }
+        public bool IsDisabled { get; set; }
     }
 }

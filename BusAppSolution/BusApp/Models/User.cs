@@ -20,7 +20,6 @@ namespace BusApp.Models
         public string Role { get; set; } = "Client";
         public bool IsApproved { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-
         public bool IsDeleted { get; set; } = false;
 
         //Navigation Properties

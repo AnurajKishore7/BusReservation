@@ -35,9 +35,18 @@ namespace BusApp.Repositories.Implementations.TransOp
                 if (existingOperator == null)
                     throw new KeyNotFoundException("Transport operator not found.");
 
+                //Updating fields
                 existingOperator.Name = operatorEntity.Name;
                 existingOperator.Contact = operatorEntity.Contact;
                 existingOperator.Email = operatorEntity.Email;
+
+                // Find the corresponding user in the Users table
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == existingOperator.Email);
+                if (user != null)
+                {
+                    user.Name = operatorEntity.Name; // Update the name in Users table
+                    _context.Users.Update(user);
+                }
 
                 await _context.SaveChangesAsync();
                 return true;
@@ -64,7 +73,21 @@ namespace BusApp.Repositories.Implementations.TransOp
                 if (operatorEntity == null)
                     throw new KeyNotFoundException("Transport operator not found.");
 
-                _context.TransportOperators.Remove(operatorEntity);
+                if (operatorEntity != null)
+                {
+                    operatorEntity.IsDeleted = true;  // Mark user as deleted
+                    _context.TransportOperators.Update(operatorEntity);
+                }
+                await _context.SaveChangesAsync();
+
+                // Find corresponding user in Users table
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == operatorEntity.Email);
+                if (user != null)
+                {
+                    user.IsDeleted = true;  // Mark user as deleted
+                    _context.Users.Update(user);
+                }
+
                 await _context.SaveChangesAsync();
                 return true;
             }

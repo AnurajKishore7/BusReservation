@@ -34,7 +34,7 @@ namespace BusReservationApp.Context
                 .HasOne(to => to.User)
                 .WithOne(u => u.TransportOperator)
                 .HasForeignKey<TransportOperator>(to => to.Email)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
 
             // User - Client (One-to-One)
@@ -45,7 +45,7 @@ namespace BusReservationApp.Context
                 .HasOne(c => c.User)
                 .WithOne(u => u.Client)
                 .HasForeignKey<Client>(c => c.Email)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
 
             // Transport Operator - Buses (One-to-Many)
@@ -103,6 +103,7 @@ namespace BusReservationApp.Context
             modelBuilder.Entity<TransportOperator>()
                 .Property(c => c.Id)
                 .ValueGeneratedOnAdd();
+
             modelBuilder.Entity<TicketPassenger>()
                 .HasOne(tp => tp.Booking)
                 .WithMany(b => b.TicketPassengers)
@@ -153,7 +154,6 @@ namespace BusReservationApp.Context
                     Role = "Admin",
                     IsApproved = true,
                     CreatedAt = DateTime.Now
-
                 },
                 new User
                 {
@@ -187,7 +187,7 @@ namespace BusReservationApp.Context
                     DOB = new DateOnly(2002, 07, 11),
                     Gender = "Male",
                     Contact = "+911234567890",
-                    IsDiabled = false
+                    IsDisabled = false
                 }
             );
 
@@ -211,17 +211,29 @@ namespace BusReservationApp.Context
                     OperatorId = 1,
                     BusType = "AC Sleeper",
                     TotalSeats = 40
+                },
+                new Bus
+                {
+                    Id = 2,
+                    BusNo = "TN01AB1235",
+                    OperatorId = 1,
+                    BusType = "non-AC Seater",
+                    TotalSeats = 40
                 }
             );
 
             //Seed BusRoute
             modelBuilder.Entity<BusRoute>().HasData(
-               new BusRoute { Id = 1, Source = "Chennai", Destination = "Kanyakumari", EstimatedDuration = "12:30", Distance = 750 }
+               new BusRoute { Id = 1, Source = "Chennai", Destination = "Kanyakumari", EstimatedDuration = "12:30", Distance = 750 },
+               new BusRoute { Id = 2, Source = "Kanyakumari", Destination = "Chennai", EstimatedDuration = "12:30", Distance = 750 },
+               new BusRoute { Id = 3, Source = "Chennai", Destination = "Bangalore", EstimatedDuration = "06:00", Distance = 350 },
+               new BusRoute { Id = 4, Source = "Bangalore", Destination = "Chennai", EstimatedDuration = "06:00", Distance = 350 }
            );
 
             // Seeding Trip Data
             modelBuilder.Entity<Trip>().HasData(
-                new Trip { Id = 1, BusRouteId = 1, BusId = 1, DepartureTime = new DateTime(2025, 2, 10, 8, 0, 0), ArrivalTime = new DateTime(2025, 2, 10, 10, 30, 0), Price = 700 }
+                new Trip { Id = 1, BusRouteId = 1, BusId = 1, DepartureTime = new DateTime(2025, 2, 10, 8, 0, 0), ArrivalTime = new DateTime(2025, 2, 10, 20, 30, 0), Price = 700 },
+                new Trip { Id = 2, BusRouteId = 3, BusId = 2, DepartureTime = new DateTime(2025, 2, 10, 8, 0, 0), ArrivalTime = new DateTime(2025, 2, 10, 14, 0, 0), Price = 350 }
             );
 
 

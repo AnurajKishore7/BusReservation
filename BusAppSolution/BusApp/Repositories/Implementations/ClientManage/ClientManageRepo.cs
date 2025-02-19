@@ -75,9 +75,18 @@ namespace BusApp.Repositories.Implementations.ClientManage
                 existingClient.DOB = client.DOB;
                 existingClient.Gender = client.Gender;
                 existingClient.Contact = client.Contact;
-                existingClient.IsDiabled = client.IsDiabled;
+                existingClient.IsDisabled = client.IsDisabled;
 
                 _context.Clients.Update(existingClient);
+
+                // Find the corresponding user in the Users table
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == existingClient.Email);
+                if (user != null)
+                {
+                    user.Name = client.Name; // Update the name in Users table
+                    _context.Users.Update(user);
+                }
+
                 await _context.SaveChangesAsync();
 
                 return existingClient;
@@ -96,10 +105,21 @@ namespace BusApp.Repositories.Implementations.ClientManage
                     throw new ArgumentException("Invalid Client ID.");
 
                 var client = await _context.Clients.FindAsync(clientId);
-                if (client == null)
-                    return false; 
+                if (client != null)
+                {
+                    client.IsDeleted = true;  // Mark user as deleted
+                    _context.Clients.Update(client);
+                }
+                await _context.SaveChangesAsync();
 
-                _context.Clients.Remove(client);
+
+                // Find corresponding user in Users table
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == client.Email);
+                if (user != null)
+                {
+                    user.IsDeleted = true;  // Mark user as deleted
+                    _context.Users.Update(user);
+                }
                 await _context.SaveChangesAsync();
 
                 return true; 

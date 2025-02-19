@@ -18,7 +18,8 @@ namespace BusApp.Models
         [Required]
         [RegularExpression(@"\+91?[0-9]{10}", ErrorMessage = "Invalid Indian mobile number.")]
         public string? Contact { get; set; }
-        public bool IsDiabled { get; set; }
+        public bool IsDisabled { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
 
 
         //Naviagation Properites

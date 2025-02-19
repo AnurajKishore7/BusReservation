@@ -14,7 +14,7 @@ namespace BusApp.Controllers
 
         public BookingController(IBookingService bookingService)
         {
-            _bookingService = bookingService ?? throw new ArgumentNullException(nameof(bookingService));
+            _bookingService = bookingService;
         }
 
         

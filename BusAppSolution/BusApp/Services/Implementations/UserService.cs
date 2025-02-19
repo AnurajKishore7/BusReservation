@@ -54,7 +54,7 @@ namespace BusApp.Services.Implementations
                     DOB = clientDto.DOB,
                     Gender = clientDto.Gender,
                     Contact = clientDto.Contact,
-                    IsDiabled = clientDto.IsDiabled
+                    IsDisabled = clientDto.IsDiabled
                 };
                 await _clientRepository.AddAsync(client);
 
@@ -154,7 +154,7 @@ namespace BusApp.Services.Implementations
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.Now.AddDays(7),
+                    Expires = DateTime.Now.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
 

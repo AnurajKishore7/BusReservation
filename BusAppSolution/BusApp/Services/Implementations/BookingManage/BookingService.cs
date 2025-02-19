@@ -62,7 +62,7 @@ namespace BusApp.Services.Implementations.BookingManage
                     BookingId = createdBooking.Id,
                     TotalAmount = bookingRequest.Payment.TotalAmount,
                     PaymentMethod = bookingRequest.Payment.PaymentMethod,
-                    Status = "Pending",
+                    Status = "Confirmed",
                     PaymentMadeAt = DateTime.Now
                 };
 
@@ -273,7 +273,7 @@ namespace BusApp.Services.Implementations.BookingManage
             {
                 var confirmedBookings = await _bookingRepo.GetConfirmedBookingsAsync();
                 if (confirmedBookings == null || !confirmedBookings.Any())
-                    return new List<BookingResponseDto>(); // Return empty list if no confirmed bookings found
+                    return new List<BookingResponseDto>();
 
                 var bookingDtos = new List<BookingResponseDto>();
 
@@ -325,7 +325,7 @@ namespace BusApp.Services.Implementations.BookingManage
 
                 var confirmedBookings = await _bookingRepo.GetConfirmedBookingsByClientIdAsync(clientId);
                 if (confirmedBookings == null || !confirmedBookings.Any())
-                    return new List<BookingResponseDto>(); // Return empty list if no confirmed bookings found
+                    return new List<BookingResponseDto>();
 
                 var bookingDtos = new List<BookingResponseDto>();
 

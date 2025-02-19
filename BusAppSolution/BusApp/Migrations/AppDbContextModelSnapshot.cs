@@ -91,6 +91,14 @@ namespace BusApp.Migrations
                             BusType = "AC Sleeper",
                             OperatorId = 1,
                             TotalSeats = 40
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BusNo = "TN01AB1235",
+                            BusType = "non-AC Seater",
+                            OperatorId = 1,
+                            TotalSeats = 40
                         });
                 });
 
@@ -131,6 +139,30 @@ namespace BusApp.Migrations
                             Distance = 750,
                             EstimatedDuration = "12:30",
                             Source = "Chennai"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Destination = "Chennai",
+                            Distance = 750,
+                            EstimatedDuration = "12:30",
+                            Source = "Kanyakumari"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Destination = "Bangalore",
+                            Distance = 350,
+                            EstimatedDuration = "06:00",
+                            Source = "Chennai"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Destination = "Chennai",
+                            Distance = 350,
+                            EstimatedDuration = "06:00",
+                            Source = "Bangalore"
                         });
                 });
 
@@ -155,7 +187,10 @@ namespace BusApp.Migrations
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDiabled")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDisabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -178,7 +213,8 @@ namespace BusApp.Migrations
                             DOB = new DateOnly(2002, 7, 11),
                             Email = "anuraj@gmail.com",
                             Gender = "Male",
-                            IsDiabled = false,
+                            IsDeleted = false,
+                            IsDisabled = false,
                             Name = "Anuraj"
                         });
                 });
@@ -265,6 +301,9 @@ namespace BusApp.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -283,6 +322,7 @@ namespace BusApp.Migrations
                             Id = 1,
                             Contact = "+919876543210",
                             Email = "smartbus@gmail.com",
+                            IsDeleted = false,
                             Name = "SmartBus"
                         });
                 });
@@ -322,11 +362,20 @@ namespace BusApp.Migrations
                         new
                         {
                             Id = 1,
-                            ArrivalTime = new DateTime(2025, 2, 10, 10, 30, 0, 0, DateTimeKind.Unspecified),
+                            ArrivalTime = new DateTime(2025, 2, 10, 20, 30, 0, 0, DateTimeKind.Unspecified),
                             BusId = 1,
                             BusRouteId = 1,
                             DepartureTime = new DateTime(2025, 2, 10, 8, 0, 0, 0, DateTimeKind.Unspecified),
                             Price = 700m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ArrivalTime = new DateTime(2025, 2, 10, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            BusId = 2,
+                            BusRouteId = 3,
+                            DepartureTime = new DateTime(2025, 2, 10, 8, 0, 0, 0, DateTimeKind.Unspecified),
+                            Price = 350m
                         });
                 });
 
@@ -368,34 +417,34 @@ namespace BusApp.Migrations
                         new
                         {
                             Email = "admin@gmail.com",
-                            CreatedAt = new DateTime(2025, 2, 10, 21, 51, 29, 180, DateTimeKind.Local).AddTicks(9384),
+                            CreatedAt = new DateTime(2025, 2, 19, 11, 7, 45, 737, DateTimeKind.Local).AddTicks(2499),
                             IsApproved = true,
                             IsDeleted = false,
                             Name = "Super Admin",
-                            PasswordHash = new byte[] { 89, 71, 75, 68, 177, 235, 156, 199, 162, 219, 204, 54, 60, 197, 126, 237, 73, 143, 11, 79, 78, 203, 18, 114, 173, 46, 192, 61, 37, 15, 160, 14, 190, 188, 249, 81, 87, 254, 235, 245, 210, 185, 208, 95, 153, 4, 128, 184, 189, 115, 15, 87, 96, 72, 200, 136, 128, 182, 28, 129, 232, 6, 24, 202 },
-                            PasswordSalt = new byte[] { 16, 252, 110, 184, 4, 80, 165, 171, 27, 110, 82, 12, 152, 165, 194, 232, 28, 100, 22, 81, 46, 0, 160, 197, 225, 65, 222, 225, 63, 187, 18, 104, 243, 180, 118, 121, 123, 238, 179, 125, 110, 57, 182, 125, 209, 89, 95, 74, 153, 114, 37, 13, 72, 84, 97, 218, 88, 35, 230, 2, 208, 183, 146, 200, 240, 82, 221, 1, 64, 189, 74, 187, 182, 179, 36, 124, 64, 135, 202, 172, 54, 232, 43, 41, 201, 47, 156, 90, 154, 18, 36, 88, 18, 144, 185, 166, 24, 59, 2, 84, 151, 198, 86, 236, 171, 90, 148, 249, 179, 180, 20, 227, 200, 14, 187, 123, 46, 254, 164, 176, 96, 115, 251, 95, 70, 211, 239, 112 },
+                            PasswordHash = new byte[] { 135, 89, 179, 178, 87, 181, 95, 146, 213, 209, 219, 173, 6, 207, 171, 18, 126, 231, 141, 72, 161, 119, 25, 86, 94, 95, 157, 155, 148, 145, 128, 7, 32, 3, 79, 119, 79, 33, 129, 155, 2, 52, 97, 97, 63, 240, 161, 153, 33, 188, 40, 240, 249, 182, 243, 180, 27, 171, 171, 152, 92, 156, 1, 229 },
+                            PasswordSalt = new byte[] { 126, 202, 212, 226, 243, 172, 167, 31, 139, 161, 216, 55, 27, 165, 243, 204, 76, 220, 176, 214, 77, 40, 78, 242, 212, 200, 111, 0, 58, 101, 17, 75, 82, 235, 92, 154, 63, 160, 234, 157, 214, 213, 143, 164, 41, 128, 202, 105, 123, 172, 162, 113, 9, 59, 214, 185, 103, 159, 102, 239, 253, 173, 16, 34, 121, 245, 230, 95, 17, 87, 253, 211, 14, 189, 61, 22, 189, 84, 199, 140, 131, 18, 172, 157, 89, 243, 38, 62, 155, 85, 199, 247, 97, 74, 126, 236, 76, 43, 148, 16, 73, 146, 252, 240, 60, 4, 130, 31, 128, 95, 106, 26, 43, 208, 121, 104, 243, 254, 230, 253, 214, 106, 193, 137, 243, 27, 34, 69 },
                             Role = "Admin"
                         },
                         new
                         {
                             Email = "smartbus@gmail.com",
-                            CreatedAt = new DateTime(2025, 2, 10, 21, 51, 29, 180, DateTimeKind.Local).AddTicks(9387),
+                            CreatedAt = new DateTime(2025, 2, 19, 11, 7, 45, 737, DateTimeKind.Local).AddTicks(2501),
                             IsApproved = true,
                             IsDeleted = false,
                             Name = "Smart Bus",
-                            PasswordHash = new byte[] { 119, 1, 142, 61, 5, 88, 235, 205, 57, 210, 99, 36, 46, 57, 111, 90, 101, 61, 12, 71, 53, 155, 31, 95, 190, 218, 169, 154, 254, 201, 165, 143, 93, 114, 84, 244, 215, 245, 56, 144, 117, 65, 9, 73, 63, 34, 3, 33, 250, 87, 142, 185, 215, 24, 126, 183, 148, 88, 177, 35, 100, 70, 38, 89 },
-                            PasswordSalt = new byte[] { 108, 111, 103, 116, 60, 222, 47, 19, 118, 129, 247, 173, 197, 78, 89, 4, 196, 47, 104, 146, 165, 85, 32, 73, 56, 155, 111, 44, 20, 253, 195, 157, 229, 179, 24, 98, 27, 1, 158, 23, 153, 200, 202, 250, 220, 100, 164, 221, 121, 84, 12, 206, 1, 136, 105, 79, 224, 148, 123, 91, 222, 89, 169, 188, 170, 171, 52, 36, 220, 163, 93, 28, 188, 30, 122, 9, 162, 177, 119, 185, 238, 194, 164, 156, 52, 86, 162, 245, 49, 123, 237, 233, 183, 74, 179, 56, 206, 110, 110, 64, 188, 228, 177, 109, 13, 90, 42, 21, 35, 108, 45, 88, 66, 235, 224, 88, 110, 249, 200, 200, 234, 215, 197, 238, 211, 214, 21, 23 },
+                            PasswordHash = new byte[] { 127, 242, 60, 50, 7, 36, 123, 248, 118, 137, 188, 212, 191, 76, 229, 108, 119, 20, 5, 213, 210, 53, 206, 95, 191, 109, 20, 221, 74, 210, 45, 78, 112, 196, 203, 197, 131, 178, 230, 190, 41, 8, 243, 183, 5, 149, 210, 163, 85, 202, 114, 151, 156, 181, 91, 50, 132, 233, 52, 60, 5, 228, 228, 106 },
+                            PasswordSalt = new byte[] { 140, 89, 237, 31, 135, 84, 156, 114, 190, 60, 29, 36, 223, 53, 2, 236, 74, 124, 110, 47, 44, 150, 242, 21, 56, 68, 165, 183, 201, 173, 17, 116, 184, 33, 248, 251, 43, 74, 48, 97, 248, 198, 138, 235, 120, 14, 249, 102, 38, 73, 18, 26, 81, 46, 133, 114, 73, 107, 19, 142, 242, 114, 169, 66, 190, 191, 90, 131, 31, 160, 143, 192, 231, 61, 201, 11, 62, 92, 76, 37, 82, 194, 185, 118, 206, 129, 136, 158, 155, 20, 239, 61, 34, 85, 199, 242, 217, 133, 195, 77, 123, 138, 71, 190, 221, 178, 200, 77, 143, 74, 42, 240, 52, 132, 155, 236, 227, 42, 181, 87, 106, 3, 170, 135, 117, 180, 183, 128 },
                             Role = "TransportOperator"
                         },
                         new
                         {
                             Email = "anuraj@gmail.com",
-                            CreatedAt = new DateTime(2025, 2, 10, 21, 51, 29, 180, DateTimeKind.Local).AddTicks(9390),
+                            CreatedAt = new DateTime(2025, 2, 19, 11, 7, 45, 737, DateTimeKind.Local).AddTicks(2503),
                             IsApproved = true,
                             IsDeleted = false,
                             Name = "Anuraj",
-                            PasswordHash = new byte[] { 248, 18, 95, 147, 137, 243, 206, 230, 73, 179, 192, 46, 83, 152, 167, 231, 45, 10, 237, 17, 232, 193, 45, 58, 121, 240, 55, 134, 91, 25, 29, 224, 209, 177, 41, 177, 206, 64, 106, 199, 63, 118, 163, 224, 199, 71, 114, 86, 209, 103, 140, 32, 139, 126, 63, 57, 131, 56, 159, 143, 234, 96, 251, 51 },
-                            PasswordSalt = new byte[] { 104, 128, 50, 233, 200, 200, 192, 3, 202, 25, 93, 242, 42, 162, 129, 111, 175, 70, 129, 234, 82, 50, 71, 140, 7, 46, 118, 160, 65, 72, 235, 57, 216, 109, 223, 161, 86, 23, 223, 194, 187, 121, 78, 212, 98, 206, 22, 58, 102, 228, 240, 115, 123, 41, 120, 40, 168, 117, 115, 20, 90, 73, 131, 15, 138, 136, 108, 25, 199, 5, 97, 239, 13, 243, 133, 157, 60, 86, 20, 185, 125, 18, 123, 0, 17, 213, 170, 223, 235, 42, 118, 152, 176, 192, 61, 3, 31, 96, 92, 164, 203, 207, 160, 137, 175, 133, 142, 176, 46, 237, 249, 3, 91, 238, 180, 213, 0, 250, 247, 7, 225, 5, 8, 101, 230, 110, 189, 220 },
+                            PasswordHash = new byte[] { 236, 177, 207, 82, 244, 194, 155, 138, 166, 35, 96, 207, 187, 219, 244, 137, 142, 236, 98, 244, 14, 24, 120, 4, 190, 230, 202, 39, 142, 213, 171, 219, 172, 139, 206, 86, 6, 156, 231, 226, 107, 51, 245, 241, 0, 81, 165, 152, 108, 247, 116, 27, 44, 253, 180, 133, 76, 102, 126, 167, 178, 220, 215, 136 },
+                            PasswordSalt = new byte[] { 180, 180, 156, 75, 144, 109, 79, 133, 61, 141, 220, 151, 221, 193, 204, 126, 158, 191, 107, 150, 195, 206, 133, 87, 82, 58, 95, 53, 121, 170, 152, 49, 228, 66, 191, 99, 176, 37, 151, 33, 41, 172, 11, 40, 60, 18, 22, 73, 6, 182, 140, 228, 245, 134, 41, 195, 26, 65, 131, 136, 124, 45, 244, 104, 179, 225, 44, 231, 200, 21, 124, 83, 125, 139, 52, 20, 145, 53, 127, 161, 111, 110, 112, 28, 199, 65, 8, 47, 27, 57, 240, 242, 117, 55, 138, 4, 255, 144, 247, 123, 102, 36, 93, 227, 164, 168, 35, 134, 47, 97, 198, 162, 184, 101, 46, 221, 253, 92, 91, 132, 42, 82, 26, 170, 61, 28, 69, 86 },
                             Role = "Client"
                         });
                 });
@@ -435,7 +484,7 @@ namespace BusApp.Migrations
                     b.HasOne("BusApp.Models.User", "User")
                         .WithOne("Client")
                         .HasForeignKey("BusApp.Models.Client", "Email")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("User");
                 });
@@ -467,7 +516,7 @@ namespace BusApp.Migrations
                     b.HasOne("BusApp.Models.User", "User")
                         .WithOne("TransportOperator")
                         .HasForeignKey("BusApp.Models.TransportOperator", "Email")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("User");
                 });
